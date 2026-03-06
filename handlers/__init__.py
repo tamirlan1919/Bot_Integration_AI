@@ -1,6 +1,6 @@
-def main():
-    pass
+from aiogram import Router
+from handlers.commands_handler import router as commands_router
 
+router = Router()
 
-if __name__ == '__main__':
-    main()
+router.include_router(commands_router)
