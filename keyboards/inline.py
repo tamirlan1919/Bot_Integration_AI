@@ -1,7 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 
-def main_menu():
+def main_menu() -> InlineKeyboardMarkup:
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [InlineKeyboardButton(text='🎲 Случайный факт', callback_data='menu:random', style='primary')],
@@ -11,3 +11,41 @@ def main_menu():
         ]
     )
     return keyboard
+
+
+def random_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text='🎲 Хочу еще факт', callback_data='random:again')],
+            [InlineKeyboardButton(text='⛔️ Закончить', callback_data='random:stop')],
+        ]
+    )
+
+
+def gpt_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text='Закончить', callback_data='gpt:stop')]
+        ]
+    )
+
+
+def persons_keyboard(persons):
+    buttons = [
+        [InlineKeyboardButton(text=f'{data["emoji"]} {data["name"]}', callback_data=f'talk:person:{key}')]
+        for key, data in persons.items()
+    ]
+    buttons.append([
+        InlineKeyboardButton(text='⛔️ Отмена', callback_data='talk:cancel')
+    ])
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def talk_keyboard():
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text='🔄 Сменить собеседника', callback_data='talk:change')],
+            [InlineKeyboardButton(text='⛔️ Закончить', callback_data='talk:stop')],
+        ]
+    )
+

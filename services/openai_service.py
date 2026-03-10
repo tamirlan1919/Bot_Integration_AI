@@ -1,7 +1,9 @@
-from openai import AsyncOpenAI
-from config import TOKEN_GPT_AI
 import logging
-import asyncio
+from typing import Any
+
+from openai import AsyncOpenAI
+
+from config import TOKEN_GPT_AI
 
 
 client = AsyncOpenAI(api_key=TOKEN_GPT_AI)
@@ -14,13 +16,17 @@ logger = logging.getLogger(__name__)
 async def ask_gpt(
         user_message: str,
         system_prompt: str = 'Ты полезный ассистент.Отвечай кратко и по делу',
-        history: list = None
+        history: list[dict[str, Any]] | None = None
 ) -> str:
     try:
         messages = [{'role': 'system', 'content': system_prompt}]
 
         if history:
-            messages.append(history)
+            valid_history = [
+                item for item in history
+                if isinstance(item, dict) and 'role' in item and 'content' in item
+            ]
+            messages.extend(valid_history)
         messages.append({'role': 'user', 'content': user_message})
         logger.info(f'GPT запрос {user_message[:20]}')
 
