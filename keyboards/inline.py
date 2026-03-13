@@ -49,3 +49,23 @@ def talk_keyboard():
         ]
     )
 
+
+def topics_keyboard(topics: dict) -> InlineKeyboardMarkup:
+    buttons = [
+        [InlineKeyboardButton(text=data['name'], callback_data=f'quiz:topic:{key}')]
+        for key, data in topics.items()
+    ]
+    buttons.append(
+        [InlineKeyboardButton(text='⛔️ Отмена', callback_data='quiz:cancel')]
+    )
+    return InlineKeyboardMarkup(inline_keyboard=buttons)
+
+
+def after_answer_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text='▶️ Следующий вопрос', callback_data=f'quiz:next')],
+            [InlineKeyboardButton(text='🔄 Сменить тему', callback_data=f'quiz:change_topic')],
+            [InlineKeyboardButton(text='🛑 Закончить квиз', callback_data=f'quiz:stop')],
+        ]
+    )

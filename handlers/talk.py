@@ -1,4 +1,5 @@
 import logging
+from html import escape
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, FSInputFile
@@ -84,6 +85,7 @@ async def on_person_choosen(callback: CallbackQuery, state: FSMContext):
                  ), reply_markup=talk_keyboard(), parse_mode='html'
     )
 
+
 @router.message(TalkStates.chatting, F.text)
 async def cmd_talk_message(message: Message, state: FSMContext):
     data = await state.get_data()
@@ -116,5 +118,6 @@ async def cmd_talk_message(message: Message, state: FSMContext):
 
     await state.update_data(history=history)
 
-    await message.answer(f'{person["emoji"]} <b>{person["name"]}</b>\n\n{response}')
-
+    await message.answer(
+        f'{person["emoji"]} <b>{escape(person["name"])}</b>\n\n{escape(response)}'
+    )

@@ -1,4 +1,5 @@
 import logging
+from html import escape
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, FSInputFile
@@ -59,11 +60,13 @@ async def cmd_gpt_message(message: Message, state: FSMContext):
         history=history[:-1]
     )
 
+    history.append({'role': 'assistant', 'content': response})
+
     if len(history) > 20:
         history = history[-20:]
 
     await state.update_data(history=history)
-    await message.answer(response, reply_markup=gpt_keyboard())
+    await message.answer(escape(response), reply_markup=gpt_keyboard())
 
 
 @router.callback_query(F.data == 'gpt:stop')

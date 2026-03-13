@@ -1,4 +1,5 @@
 import logging
+from html import escape
 from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message, CallbackQuery, FSInputFile
@@ -24,14 +25,15 @@ async def send_random_fact(message: Message):
     )
 
     fact = await ask_gpt(user_message=FACT_PROMPT)
+    safe_fact = escape(fact)
 
     try:
         photo = FSInputFile('images/random.png')
-        await message.answer_photo(photo=photo, caption=f'<b>Случайный факт</b>\n\n{fact}',
+        await message.answer_photo(photo=photo, caption=f'<b>Случайный факт</b>\n\n{safe_fact}',
                                    reply_markup=random_keyboard(), parse_mode='html')
     except Exception as e:
         logger.error('Не удалось отправить фото')
-        await message.answer(f'<b>Случайный факт</b>\n\n{fact}', reply_markup=random_keyboard(),
+        await message.answer(f'<b>Случайный факт</b>\n\n{safe_fact}', reply_markup=random_keyboard(),
                              parse_mode='html')
 
 
